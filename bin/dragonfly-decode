@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+require 'dragonfly'
+require 'pp'
+
+pp Dragonfly::Serializer.json_b64_decode(ARGV[0]) if ARGV[0]
