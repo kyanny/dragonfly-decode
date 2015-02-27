@@ -1,9 +1,29 @@
 #!/usr/bin/env ruby
 require 'dragonfly'
+require 'optparse'
 require 'pp'
 
-begin
-  pp Dragonfly::Serializer.json_b64_decode(ARGV[0]) if ARGV[0]
+OptionParser.new.tap do |opt|
+  opt.on '-h', '--help' do
+    puts <<USAGE
+Usage: #{File.basename($0)} STRING
+       #{File.basename($0)} FILE
+       #{File.basename($0)} < FILE
+USAGE
+    exit
+  end
+end.parse!
+
+def decode(string)
+  Dragonfly::Serializer.json_b64_decode(string)
 rescue
-  pp Dragonfly::Serializer.b64_decode(ARGV[0]) if ARGV[0]
+  Dragonfly::Serializer.b64_decode(string)
+end
+
+unless File.exist? ARGV[0]
+  pp decode(ARGV[0])
+else
+  ARGF.each_line do |string|
+    pp decode(string.chomp)
+  end
 end
