@@ -7,7 +7,6 @@ def usage
   puts <<USAGE
 Usage: #{File.basename($0)} STRING
        #{File.basename($0)} FILE
-       #{File.basename($0)} < FILE
 USAGE
 end
 
