@@ -2,4 +2,8 @@
 require 'dragonfly'
 require 'pp'
 
-pp Dragonfly::Serializer.json_b64_decode(ARGV[0]) if ARGV[0]
+begin
+  pp Dragonfly::Serializer.json_b64_decode(ARGV[0]) if ARGV[0]
+rescue
+  pp Dragonfly::Serializer.b64_decode(ARGV[0]) if ARGV[0]
+end
