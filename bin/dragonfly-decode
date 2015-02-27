@@ -3,13 +3,17 @@ require 'dragonfly'
 require 'optparse'
 require 'pp'
 
-OptionParser.new.tap do |opt|
-  opt.on '-h', '--help' do
-    puts <<USAGE
+def usage
+  puts <<USAGE
 Usage: #{File.basename($0)} STRING
        #{File.basename($0)} FILE
        #{File.basename($0)} < FILE
 USAGE
+end
+
+OptionParser.new.tap do |opt|
+  opt.on '-h', '--help' do
+    usage
     exit
   end
 end.parse!
@@ -20,8 +24,10 @@ rescue
   Dragonfly::Serializer.b64_decode(string)
 end
 
-unless File.exist? ARGV[0]
-  pp decode(ARGV[0])
+if ARGV[0].nil?
+  usage
+elsif !File.exist? ARGV[0]
+  pp decode(ARGV[0].to_s)
 else
   ARGF.each_line do |string|
     pp decode(string.chomp)
